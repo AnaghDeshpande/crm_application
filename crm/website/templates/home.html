@@ -5,7 +5,33 @@
 <div class="col-md-6 offset-md-3">
     {% if user.is_authenticated %}
     
-    <h1>Hello {{ user.username }} </h1>
+    {% comment %} <h1>Hello {{ user.username }} </h1> {% endcomment %}
+    <h1>Records .. </h1>
+    {% if records %} {% comment %} this records is coming from the view/home(request)  {% endcomment %}
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">Name</th>
+            <th scope="col">email</th>
+            <th scope="col">date</th>
+            <th scope="col">contact</th>
+            <th scope="col">id</th>
+          </tr>
+        </thead>
+       {% for record in records %}
+        <tbody>
+          <tr>
+            <td>{{ record.first_name }} {{ record.last_name}}</td>
+            <td>{{ record.email }}</td>
+            <td>{{ record.creation_date }}</td>
+            <td>{{ record.contact }}</td>
+            <td><a href={% url 'record' record.id %}>{{ record.id }}</a></td>  {% comment %} we are using the record keyword from urls.py and from urls.py from there it is getting passed to view/customer_record with the argument record.id {% endcomment %}
+          </tr>
+        </tbody>
+      
+       {% endfor %}
+    </table>
+    {% endif %}
     
     {% else %}
 
@@ -14,11 +40,14 @@
             <form method="POST" action="{% url 'home' %}">
                 {% csrf_token %}
                     <div class="mb-3">
+
                         <input type="text" class="form-control" name="username", placeholder="Username" required>
     
                     </div>
                     <div class="mb-3">
+
                         <input type="password" class="form-control" name="password", placeholder="Password" required>
+
                     </div>
                     <button type="submit" class="btn btn-primary">Login</button>
             </form>

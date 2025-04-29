@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<div class="col-md-6 offset-md-3">
+<h1>Customer Records..</h1>
+
+    <div class="card" style="width: 18rem;">
+        <ul class="list-group list-group-flush">
+        <strong><li class="list-group-item">{{ customer_record.first_name }} {{ customer_record.last_name }}</li></strong>
+        <li class="list-group-item">{{ customer_record.email }}</li>
+        <li class="list-group-item">{{ customer_record.creation_date }}</li>
+        <li class="list-group-item">{{ customer_record.contact }}</li>
+        <li class="list-group-item">{{ customer_record.id }}</li>
+        </ul>
+    </div>
+    <br><br>
+    <a href={% url 'home' %}><button type="submit" class="btn btn-primary" >Back</button></a>
+    <a href={% url 'delete_record' customer_record.id %}><button type="submit" class="btn btn-danger" >Delete</button></a>
+</div>
+{% endblock %}

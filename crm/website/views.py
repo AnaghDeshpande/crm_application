@@ -2,9 +2,11 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .form import SignUpForm
+from .models import Record
 
 # Create your views here.
 def home(request):
+    records = Record.objects.all()
 
     if request.method == 'POST':
         username = request.POST['username']
@@ -20,7 +22,7 @@ def home(request):
             return redirect('home')
     
     else:
-        return render(request, 'home.html', {})
+        return render(request, 'home.html', {'records' : records})
 
 def login_user(request):
     pass
@@ -47,3 +49,31 @@ def register_user(request):
         return render(request, 'register.html', {'form':form})
     
     return render(request, 'register.html', {'form':form})
+
+
+def customer_record(request, pk):
+    if request.user.is_authenticated:
+        # Look up the record
+        customer_record = Record.objects.get(id=pk)
+        return render(request, 'customer.html', {'customer_record': customer_record})  # we are passing customer_record to customer.html
+    else:
+        messages.success(request, "You Must Be Logged In To View That Page...")
+        return redirect('home')
+    
+
+
+def add_record(request):
+    return render(request, 'add_record.html', {})
+
+
+
+
+def delete_record(request, pk):
+    if request.user.is_authenticated:
+        delete_rec = Record.objects.get(id=pk)
+        delete_rec.delete()
+        messages.success(request, "The record has been deleted")
+        return redirect('home')
+    else:
+        messages.success(request, "You Must Be Logged In To delete That record...")
+        return redirect('home')
